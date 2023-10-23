@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {signInStart,signInFail,signInSuccess} from '../redux/userSlice.js';
 import { useDispatch, useSelector } from "react-redux";
+import OAuth from '../components/OAuth.jsx'
 export default function SignIn() {
   const [credential, setCredential] = useState({});
-  const {loading, error} = useSelector(state=>state.user || {});
+  const {loading, error} = useSelector((state)=>state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleOnChange = (e) => {
@@ -59,6 +60,7 @@ export default function SignIn() {
         >
           {loading ? "Loading..." : "SIGNIN"}
         </button>
+        <OAuth/>
       </form>
       <div className="flex my-2 gap-2">
         <p className="text-slate-500">Dont have a account</p>
