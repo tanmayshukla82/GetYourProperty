@@ -21,6 +21,7 @@ export default function OAuth() {
         body:JSON.stringify({name:result.user.displayName,email:result.user.email,photo:result.user.photoURL})
       });
       const resData = await res.json();
+      console.log(resData);
       dispatch(signInSuccess(resData));
       navigate("/");
     } catch (error) {

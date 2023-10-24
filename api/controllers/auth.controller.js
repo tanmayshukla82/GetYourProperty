@@ -41,7 +41,7 @@ export const googleAuth = async (req, res) => {
     const user = await User.findOne({ email });
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
-      const { password: pass, ...rest } = user;
+      const { password: pass, ...rest } = user._doc;
       res
         .cookie("access_token", token, { httpOnly: true })
         .status(200)
@@ -59,7 +59,7 @@ export const googleAuth = async (req, res) => {
       });
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY);
-      const { password: pass, ...rest } = newUser;
+      const { password: pass, ...rest } = newUser._doc;
        res
          .cookie("access_token", token, { httpOnly: true })
          .status(200)
