@@ -4,7 +4,7 @@ import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/st
 import { useDispatch } from "react-redux";
 import {app} from '../../firebase.js'; 
 import { deleteUserFail, deleteUserStart, deleteUserSuccess, signOutUserFail, signOutUserStart, signOutUserSuccess, updateFail, updateStart, updateSuccess } from "../redux/userSlice.js";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 export default function Profile() {
   const dispatch = useDispatch();
   const { currentUser,loading } = useSelector((state) => state.user);
@@ -144,6 +144,7 @@ export default function Profile() {
         <button className="uppercase bg-slate-700 text-white rounded-lg p-3">
           update
         </button>
+        <Link to='create-listing' className="uppercase bg-green-700 p-3 text-center text-white rounded-lg">Create Listing</Link>
       </form>
       <div className="flex justify-between my-2">
         <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete Account</span>
