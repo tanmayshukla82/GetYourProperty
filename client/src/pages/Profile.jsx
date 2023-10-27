@@ -14,6 +14,8 @@ export default function Profile() {
   const [filePerc,setFilePerc] = useState(0);
   const [fileError, setFileError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [showListingError, setShowListingError] = useState("");
+  const [userList, setUserList] = useState([]);
   useEffect(()=>{
     if(file){
       handleFileUpload(file);
@@ -89,6 +91,16 @@ export default function Profile() {
       dispatch(signOutUserFail(error.message));
     }
   };
+  const handleShowList = async()=>{
+    try {
+      const res = await fetch(`/api/listing/getListing/${currentUser._id}`);
+      const resData = await res.json();
+      console.log(resData);
+      setUserList(resData);
+    } catch (error) {
+      setShowListingError("Something went wrong");
+    }
+  }
   return (
     <div className="max-w-lg mx-auto p-3">
       <h1 className="text-center text-3xl font-semibold my-7">Profile</h1>
@@ -150,6 +162,40 @@ export default function Profile() {
         <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete Account</span>
         <span onClick={handleSignOut} className="text-red-700 cursor-pointer">Sign out</span>
       </div>
+      {
+        showListingError.length>0&&<p className="text-red-700 text-center">{showListingError}</p>
+      }
+      <button onClick={handleShowList} className="text-green-700 w-full">Show Listing</button>
+      {
+        userList && userList.length>0 && userList.map((list)=>{
+          return (
+            <>
+              <p className="text-center text-gray-700 text-3xl font-semibold">Your Listing</p>
+              <div
+                key={list._id}
+                className="border border-gray-300 p-3 flex items-center justify-between rounded-lg gap-4 mt-5"
+              >
+                <Link to={`/listing/${list._id}`}>
+                  <img
+                    src={list.images[0]}
+                    alt=""
+                    className="rounded-lg object-contain w-16 h-16"
+                  />
+                </Link>
+                <Link to={`/listing/${list._id}`} className="flex-1">
+                  <p className="font-semibold text-gray-700 hover:underline">
+                    {list.name}
+                  </p>
+                </Link>
+                <div className="flex flex-col">
+                  <button className="text-green-700">EDIT</button>
+                  <button className="text-red-700">DELETE</button>
+                </div>
+              </div>
+            </>
+          );
+        })
+      }
     </div>
   );
 }

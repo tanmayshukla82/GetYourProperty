@@ -18,7 +18,7 @@ export default function Listing() {
     bedrooms: 1,
     regularPrice: 0,
     discountedPrice: 0,
-    userRef: currentUser.email,
+    userRef: currentUser._id,
     offer: false,
     parking: false,
     furnished:false
