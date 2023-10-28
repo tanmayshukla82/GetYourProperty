@@ -95,10 +95,25 @@ export default function Profile() {
     try {
       const res = await fetch(`/api/listing/getListing/${currentUser._id}`);
       const resData = await res.json();
-      console.log(resData);
       setUserList(resData);
     } catch (error) {
       setShowListingError("Something went wrong");
+    }
+  }
+  const handleDeleteUserList = async(id)=>{
+    try {
+      const res = await fetch(`/api/listing/deleteUserList/${id}`);
+      const resData = await res.json();
+      if(resData.success === false){
+        return setShowListingError("Unable to delete");
+      }
+      const flteredList = 
+        userList.filter((list)=>{
+          return list._id!==id;})
+
+      setUserList(flteredList);
+    } catch (error) {
+      showListingError("Unable to delete");
     }
   }
   return (
@@ -156,21 +171,38 @@ export default function Profile() {
         <button className="uppercase bg-slate-700 text-white rounded-lg p-3">
           update
         </button>
-        <Link to='create-listing' className="uppercase bg-green-700 p-3 text-center text-white rounded-lg">Create Listing</Link>
+        <Link
+          to="create-listing"
+          className="uppercase bg-green-700 p-3 text-center text-white rounded-lg"
+        >
+          Create Listing
+        </Link>
       </form>
       <div className="flex justify-between my-2">
-        <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete Account</span>
-        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">Sign out</span>
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer"
+        >
+          Delete Account
+        </span>
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
+          Sign out
+        </span>
       </div>
-      {
-        showListingError.length>0&&<p className="text-red-700 text-center">{showListingError}</p>
-      }
-      <button onClick={handleShowList} className="text-green-700 w-full">Show Listing</button>
-      {
-        userList && userList.length>0 && userList.map((list)=>{
+      {showListingError.length > 0 && (
+        <p className="text-red-700 text-center">{showListingError}</p>
+      )}
+      <button onClick={handleShowList} className="text-green-700 w-full">
+        Show Listing
+      </button>
+      {userList.length > 0 && (
+          <p className="text-center text-gray-700 text-3xl font-semibold">
+            Your Listing
+          </p>
+        ) &&
+        userList.map((list) => {
           return (
             <>
-              <p className="text-center text-gray-700 text-3xl font-semibold">Your Listing</p>
               <div
                 key={list._id}
                 className="border border-gray-300 p-3 flex items-center justify-between rounded-lg gap-4 mt-5"
@@ -189,13 +221,17 @@ export default function Profile() {
                 </Link>
                 <div className="flex flex-col">
                   <button className="text-green-700">EDIT</button>
-                  <button className="text-red-700">DELETE</button>
+                  <button
+                    onClick={() => handleDeleteUserList(list._id)}
+                    className="text-red-700"
+                  >
+                    DELETE
+                  </button>
                 </div>
               </div>
             </>
           );
-        })
-      }
+        })}
     </div>
   );
 }

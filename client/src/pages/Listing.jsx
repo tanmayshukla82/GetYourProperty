@@ -26,6 +26,9 @@ export default function Listing() {
   const [uploading, setUploading] = useState(false);
   const [imageError, setImageError] = useState("");
   const handleImages = ()=>{
+    if(images.length === 0){
+      return setImageError("Upload pictures to proceed");
+    }
     setUploading(true);
     if(images.length > 0 && images.length<7){
       const promises = [];
@@ -107,7 +110,9 @@ export default function Listing() {
       body:JSON.stringify(formData)
     })
     const data = await res.json();
-    console.log(data);
+    if(data.success === false){
+      return setImageError("Unable to create list");
+    }
   }
   return (
     <main className="p-3 max-w-3xl mx-auto">

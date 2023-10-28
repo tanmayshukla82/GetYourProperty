@@ -10,6 +10,8 @@ export const createListing = async(req,res,next)=>{
     }
 }
 export const getListing = async(req,res,next)=>{
+    if (req.user.id !== req.params.id)
+      return next(errMessage(403, "Forbidden"));
     try {
         const listing = await Listing.find({userRef:req.params.id});
         if(!listing){
@@ -18,5 +20,17 @@ export const getListing = async(req,res,next)=>{
         res.status(200).json(listing);
     } catch (error) {
         next(error);
+    }
+}
+
+export const deleteUserList = async(req,res,next)=>{
+    const userList = await Listing.findById(req.params.id);
+    if(req.user.id!== userList.userRef)
+        return next(errMessage(403,"Forbidden"));
+    try {
+        await Listing.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "List deleted" });
+    } catch (error) {
+        next(error)
     }
 }
