@@ -34,3 +34,28 @@ export const deleteUserList = async(req,res,next)=>{
         next(error)
     }
 }
+export const updateUserList = async(req,res,next)=>{
+    const userList = await Listing.findById(req.params.id);
+    if (req.user.id !== userList.userRef)
+        return next(errMessage(403, "Forbidden"));
+    try {
+        const list = await Listing.findByIdAndUpdate(req.params.id,req.body,{new:true});
+        if(!list){
+            return next(errMessage(402,"No listing found"))
+        }
+        res.status(200).json(list);
+    } catch (error) {
+        next(error)
+    }
+}   
+ export const getUserListing = async(req,res,next)=>{
+    try {
+        const list = await Listing.findById(req.params.id);
+        if(!list){
+            return next(errMessage(402,"No listing found"));
+        }
+        res.status(200).json(list);
+    } catch (error) {
+        next(error)
+    }
+ }

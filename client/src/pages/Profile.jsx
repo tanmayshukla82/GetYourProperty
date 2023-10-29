@@ -107,11 +107,15 @@ export default function Profile() {
       if(resData.success === false){
         return setShowListingError("Unable to delete");
       }
-      const flteredList = 
-        userList.filter((list)=>{
-          return list._id!==id;})
+      // const flteredList = 
+      //   userList.filter((list)=>{
+      //     return list._id!==id;})
 
-      setUserList(flteredList);
+      // setUserList(flteredList);
+      setUserList(userList=>{
+        return userList.filter((list)=>{
+          return list._id!==id;})
+      })
     } catch (error) {
       showListingError("Unable to delete");
     }
@@ -195,41 +199,42 @@ export default function Profile() {
       <button onClick={handleShowList} className="text-green-700 w-full">
         Show Listing
       </button>
-      {userList.length > 0 && (
-          <p className="text-center text-gray-700 text-3xl font-semibold">
+      {
+        userList.length > 0 && <p className="text-center text-gray-700 text-3xl font-semibold">
             Your Listing
           </p>
-        ) &&
+      }
+      {userList.length > 0 &&
         userList.map((list) => {
           return (
-            <>
-              <div
-                key={list._id}
-                className="border border-gray-300 p-3 flex items-center justify-between rounded-lg gap-4 mt-5"
-              >
-                <Link to={`/listing/${list._id}`}>
-                  <img
-                    src={list.images[0]}
-                    alt=""
-                    className="rounded-lg object-contain w-16 h-16"
-                  />
-                </Link>
-                <Link to={`/listing/${list._id}`} className="flex-1">
-                  <p className="font-semibold text-gray-700 hover:underline">
-                    {list.name}
-                  </p>
-                </Link>
-                <div className="flex flex-col">
+            <div
+              key={list._id}
+              className="border border-gray-300 p-3 flex items-center justify-between rounded-lg gap-4 mt-5"
+            >
+              <Link to={`/listing/${list._id}`}>
+                <img
+                  src={list.images[0]}
+                  alt=""
+                  className="rounded-lg object-contain w-16 h-16"
+                />
+              </Link>
+              <Link to={`/listing/${list._id}`} className="flex-1">
+                <p className="font-semibold text-gray-700 hover:underline">
+                  {list.name}
+                </p>
+              </Link>
+              <div className="flex flex-col">
+                <Link to={`/update-listing/${list._id}`}>
                   <button className="text-green-700">EDIT</button>
-                  <button
-                    onClick={() => handleDeleteUserList(list._id)}
-                    className="text-red-700"
-                  >
-                    DELETE
-                  </button>
-                </div>
+                </Link>
+                <button
+                  onClick={() => handleDeleteUserList(list._id)}
+                  className="text-red-700"
+                >
+                  DELETE
+                </button>
               </div>
-            </>
+            </div>
           );
         })}
     </div>
