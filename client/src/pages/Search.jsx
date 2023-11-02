@@ -8,6 +8,7 @@ export default function Search() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [showMore, setShowMore] = useState(true);
   const [formData, setFormData] = useState({
     searchTerm: "",
     type: "all",
@@ -65,6 +66,7 @@ export default function Search() {
     const fetchListing = async()=>{
       try {
         setLoading(true);
+        setShowMore(false);
         const urlQuery = urlParams.toString();
         const res = await fetch(`/api/listing/listings?${urlQuery}`);
         const resData = await res.json();
@@ -72,6 +74,11 @@ export default function Search() {
           setError("Error in loading the list");
         }
         setListings(resData);
+        if(resData.length < 9){
+          setShowMore(false);
+        }else{
+          setShowMore(true);
+        }
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -80,6 +87,18 @@ export default function Search() {
     }
     fetchListing();
   },[location.search]);
+  const handleOnClickForShowMore = async()=>{
+    const searchParams = new URLSearchParams(location.search);
+    const len = listings.length;
+    searchParams.set('startIndex',len);
+    const searchQuery = searchParams.toString();
+    const res = await fetch(`/api/listing/listings?${searchQuery}`);
+    const resData = await res.json();
+    if(resData.length < 9){
+      setShowMore(false);
+    }
+    setListings([...listings, ...resData]);
+  }
   return (
     <>
       <div className="flex flex-col md:flex-row">
@@ -207,6 +226,9 @@ export default function Search() {
               )
             }
           </div>
+          {
+            showMore && listings.length>8 && <p className="text-center text-green-700" onClick={handleOnClickForShowMore}>Show More</p>
+          }
         </div>
       </div>
     </>
