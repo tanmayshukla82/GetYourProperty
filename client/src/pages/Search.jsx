@@ -217,7 +217,7 @@ export default function Search() {
               loading && <p className="text-center text-2xl">Loading...</p>
             }
           </div>
-          <div>
+          <div className="flex flex-col gap-2 flex-wrap sm:flex-row">
             {
               loading===false && listings.length>0 && (
                 listings.map((list)=>{

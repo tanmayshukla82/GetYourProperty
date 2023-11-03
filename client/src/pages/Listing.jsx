@@ -62,6 +62,7 @@ export default function Listing() {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         },
         () => {
+          setUploading(false);
           reject("Maximum size of a image in 2MB")
         },
         () => {
@@ -111,7 +112,7 @@ export default function Listing() {
     })
     const data = await res.json();
     if(data.success === false){
-      return setImageError("Unable to create list");
+      return setImageError(data.message);
     }
   }
   return (

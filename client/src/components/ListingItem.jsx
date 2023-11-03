@@ -30,9 +30,7 @@ export default function ListingItem(props) {
           </p>
           <p className="text-slate-500 mt-2 font-semibold ">
             &#8377;
-            {listing.offer
-              ? listing.discountPrice.toLocaleString("hi")
-              : listing.regularPrice.toLocaleString("hi")}
+            {listing.regularPrice.toLocaleString("hi")}
             {listing.type === "rent" && " / month"}
           </p>
           <div className="text-slate-700 flex gap-4">
