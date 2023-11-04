@@ -17,15 +17,14 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="create-listing" element={<Listing />} />
-        <Route path="update-listing/:listId" element={<UpdateList />} />
         <Route path="listing/:listId" element={<ListingUI />} />
-        <Route path="search" element={<Search/>}/>
+        <Route path="search" element={<Search />} />
         <Route element={<PrivateRouter />}>
           <Route path="/profile" element={<Profile />} />
+          <Route path="create-listing" element={<Listing />} />
+          <Route path="update-listing/:listId" element={<UpdateList />} />
         </Route>
       </Routes>
     </BrowserRouter>

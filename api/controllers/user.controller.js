@@ -1,6 +1,18 @@
 import User from "../models/user.model.js";
 import { errMessage } from "../utils/errorMessage.js";
 import bcryptjs from 'bcryptjs';
+export const getUser = async(req,res,next)=>{
+  try {
+    const user = await User.findById(req.params.id);
+    if(!user){
+      return next(errMessage(402, "User not found"));
+    }
+    const {password:pass, ...rest} = user._doc;
+    return res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+}
 export const update = async(req,res,next)=>{
     try{
         let updatedUser;
